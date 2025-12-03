@@ -463,5 +463,5 @@ else:
     print(f"Number of combinations found: {count}")
     # Nur nach der ersten gültigen Lösung das SMT2-Modell postprocessen:
     postprocess_negate_unused_assignments_with_model(
-        "modell_annotiert.smt2", assignment_varnames, found_model, assignment_varmap
+        "smt_model_annotated.smt2", assignment_varnames, found_model, assignment_varmap
     )

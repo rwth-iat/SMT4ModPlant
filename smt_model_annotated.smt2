@@ -25,6 +25,10 @@
 (assert (! (not assign_Heating_of_liquids001_resource_HC20) :named precond_fail_Heating_of_liquids001_resource HC20))
 (assert (! (not assign_Mixing_of_Liquids001_resource_HC10) :named precond_fail_Mixing_of_Liquids001_resource HC10))
 
+; Postprocessed negations
+(assert (! (not assign_Dosing001_resource_HC10) :named postproc_neg_assign_Dosing001_resource_HC10))
+(assert (! (not assign_Mixing_of_Liquids001_resource_HC30) :named postproc_neg_assign_Mixing_of_Liquids001_resource_HC30))
+
 ; Step: Mixing_of_Liquids [Mixing_of_Liquids001]: Must be mapped to exactly one resource
 (assert (! (= (+ (ite assign_Mixing_of_Liquids001_resource_HC10 1 0) (ite assign_Mixing_of_Liquids001_resource_HC20 1 0) (ite assign_Mixing_of_Liquids001_resource_HC30 1 0)) 1) :named assign_unique_Mixing_of_Liquids001))
 ; Step: Dosing [Dosing001]: Must be mapped to exactly one resource
