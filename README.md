@@ -1,62 +1,20 @@
-# SMT4ModPlant GUI Orchestrator
+# SMT4ModPlant
 
-**SMT4ModPlant** is a desktop tool for resource matching and B2MML master recipe generation in modular production plants. It parses **B2MML General Recipes**, reads **Asset Administration Shell (AAS)** capability data, and uses the **Z3 SMT solver** to calculate feasible resource assignments.
+**SMT4ModPlant**  is an open-source framework for semantic-driven feasibility checking and configuration of modular plants. The framework integrates semantic process and resource descriptions, automated transformation into formal SMT constraints, and logic-based validation of resource assignments using the Z3 SMT solver.
+This framework parses **General Recipes** in BatchML conform to ISA-88, reads **Asset Administration Shell (AAS)** files with the Capability Description Submodel, and uses the **Z3 SMT solver** to provide feasible modular plant configurations.
 
-The application provides a PyQt-based GUI for running calculations, reviewing all valid solutions, ranking solutions by weighted cost, exporting master recipes, validating generated XML files, and inspecting execution logs.
 
----
 
-## 🌟 Key Features
+## Features
 
-* **SMT-based resource matching**: Matches recipe requirements against AAS capabilities using **Z3**.
-* **Two result modes**:
-  * **All Results**: Computes all valid assignments and displays them in the results table.
-  * **Weighted Sorted Results**: Computes all valid assignments and ranks them by weighted Energy Cost, Use Cost, and CO2 Footprint.
-* **Master Recipe export**: Exports one or multiple selected solutions as **B2MML Master Recipe XML** files.
-* **Recipe validation tools**:
-  * **XSD validation** for generated or external Master Recipe XML files.
-  * **Parameter validation** against parsed AAS capabilities.
-  * Detailed in-app issue list showing validation failures, locations, and reasons.
-* **Execution log page**: Displays parser, validation, and solver messages for troubleshooting.
-* **Modern GUI**: Built with **PyQt6** and **PyQt6-Fluent-Widgets** using a dark Fluent-style interface.
-* **Configurable export and weighting**: Choose a custom export directory and adjust the weighted cost factors directly in the Home page.
+- **Semantic parsing** of general process recipes (BatchML) and resource descriptions (AAS XML, Capability Description Submodel).
+- **Automatic mapping** of required and offered capabilities using ontology-based identifiers (Semantic descriptions).
+- **SMT-based resource matching and Automated feasibility checking**: Matches recipe requirements against AAS capabilities using **Z3** and proves feasibility by step-to-resouce assignments, property compatibility, and material flow consistency.
+- **Generation of SMT-LIB models** encoding all assignment, property, and material flow constraints.
+- **Reproducible example data** for all experimental results at _*tests/fixtures/*_ (Example general recipes and resource descriptions HC10, HC20 and HC30).
 
 ---
 
-## 📥 Included Example Data
-
-The repository already contains sample files for quick testing:
-
-* **General Recipe**: `GeneralRecipe/ExampleGeneralRecipe.xml`
-* **AAS XML samples**: `AAS/XML/`
-* **AASX samples**: `AAS/AASX/`
-* **XSD schema files**: `Schema/`
-
----
-
-## 🛠️ Installation
-
-### Prebuilt Executables
-
-Prebuilt executable packages are available as **`Windows.zip`** and **`Mac.zip`**.
-
-After extracting the archive, the application is ready to use.
-
-For the macOS version, due to the operating system security mechanism for unsigned applications, you need to run the following command in Terminal before opening the app:
-
-```bash
-sudo xattr -rd com.apple.quarantine 
-```
-
-Please note that there is a trailing space at the end of the command above. Then drag **`PlantConfigurator.app`** into the Terminal window, and the application path will be filled in automatically.
-
-The full command will look like this:
-
-```bash
-sudo xattr -rd com.apple.quarantine <Path To PlantConfigurator.app>
-```
-
-Replace **`<Path To PlantConfigurator.app>`** with your actual path to **`PlantConfigurator.app`**.
 
 ### Prerequisites
 
@@ -67,117 +25,12 @@ Replace **`<Path To PlantConfigurator.app>`** with your actual path to **`PlantC
 Run the following commands in your terminal:
 
 ```bash
-pip install z3-solver PyQt6 lxml
-pip install "PyQt6-Fluent-Widgets[full]" -i https://pypi.org/simple/
+pip install z3-solver lxml
 ```
 
 ---
 
-## ▶️ Run from Source
-
-```bash
-python gui_main.py
-```
-
-The application opens with three navigation pages:
-
-* **Home**
-* **Recipe Validator**
-* **Log**
-
----
-
-## 🚀 How to Use
-
-### 1. Select Input Files
-
-On the **Home** page:
-
-* Choose a **General Recipe XML** file.
-* Choose a **Resources Directory** containing AAS files in `.xml`, `.aasx`, or `.json` format.
-
-### 2. Choose Result Mode
-
-Select one of the two available solution modes:
-
-* **Get All Results**
-* **Get All Results Sorted by Weighted Cost**
-
-When weighted sorting is enabled, the weight editor is expanded automatically.
-
-### 3. Configure Export Path and Weights
-
-Still on the **Home** page:
-
-* Keep the default export location in **Downloads**, or switch to a custom export directory.
-* In weighted mode, adjust:
-  * **Energy Cost Weight**
-  * **Use Cost Weight**
-  * **CO2 Footprint Weight**
-
-### 4. Run the Calculation
-
-Click **Start Calculation** to begin parsing and solving.
-
-* The progress bar shows calculation progress.
-* The **Results** panel slides open automatically when the run finishes.
-
-### 5. Review and Export Solutions
-
-In the **Results** panel:
-
-* Review all returned solutions in a table view.
-* In weighted mode, solutions are grouped and labeled with their total weighted score.
-* Select one or more solutions using the checkboxes.
-* Click **Export Selected** to generate one or more `MasterRecipe_Sol_<id>.xml` files.
-
----
-
-## ✅ Recipe Validator
-
-The **Recipe Validator** page provides two standalone checks:
-
-### 1. Validate Master Recipe
-
-* Select a Master Recipe XML file.
-* Select an XSD schema folder.
-* The application validates the XML against the detected root schema and shows the result in the status area.
-
-### 2. Run Parameter Validation
-
-* Select a Master Recipe XML file.
-* If calculation context is already available from the Home page, the validator reuses the parsed resource data.
-* Otherwise, select a resource folder and the tool parses the AAS files on demand.
-* The validator checks whether parameter IDs in the XML can be resolved against the available AAS capability UUIDs.
-
-When validation fails, the page shows a detailed issue list below the status summary.
-
----
-
-## 🧾 Execution Log
-
-The **Log** page displays runtime messages from:
-
-* recipe parsing
-* AAS parsing
-* solver execution
-* weighted sorting
-* export operations
-* validation workflows
-
-This page is useful for understanding why a run failed or which files were processed.
-
----
-
-## 👥 Contributors
-
-* **Bowen Chen**, RWTH Aachen, Chair of Information and Automation Systems for Process and Material Technology
-* **Michael Winter**, RWTH Aachen, Chair of Information and Automation Systems for Process and Material Technology
-* **Yafan Wu**, RWTH Aachen
-
----
-
-## 📄 License & Acknowledgments
+## License & Acknowledgments
 
 ### Project License
 
@@ -187,9 +40,18 @@ The source code of **SMT4ModPlant** is released under the **[MIT License](LICENS
 
 This project uses third-party libraries distributed under their respective licenses:
 
-* **[PyQt-Fluent-Widgets](https://github.com/zhiyiYo/PyQt-Fluent-Widgets)**
-  * Used for the graphical user interface
-  * Licensed under **GPLv3** for non-commercial use
 * **[Z3 Theorem Prover](https://github.com/Z3Prover/z3)**
-  * Used for SMT solving and optimization
+  * Used for SMT solving and feasibility checking
   * Licensed under the **MIT License**
+
+* **[Eclipse BaSyx Python SDK](https://pypi.org/project/basyx-python-sdk/)**
+  * Used optionally for reading JSON AAS files and converting them to XML-compatible AAS structures
+  * Licensed under the **MIT License**
+
+* **[Hatchling](https://hatch.pypa.io/latest/)**
+  * Used as the Python build backend defined in `pyproject.toml`
+  * Licensed under the **MIT License**
+
+* **[lxml](https://github.com/lxml/lxml)**
+  * Listed as a dependency for XML processing and validation workflows
+  * Licensed under the **BSD-3-Clause License**
