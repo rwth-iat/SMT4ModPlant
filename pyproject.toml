@@ -7,6 +7,7 @@ name = "smt4modplant"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = [
+  "basyx-python-sdk==2.1.0",
   "z3-solver",
 ]
 
